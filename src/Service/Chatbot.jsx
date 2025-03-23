@@ -17,7 +17,7 @@ const Chatbot = () => {
     setLoading(true);
 
     try {
-      const aiRes = await axios.post("http://localhost:1000/chat", {
+      const aiRes = await axios.post("https://exploreai-travel.onrender.com/chat", {
         prompt: input,
       });
 
