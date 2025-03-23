@@ -11,22 +11,30 @@ const app = express();
 app.use(express.json());
 app.use(morgan("dev")); // Log all requests
 
-// ✅ Allow requests only from your actual frontend (Vercel)
-const allowedOrigins = [
-  "https://explore-ai-travel.vercel.app", // Your actual frontend URL
-];
-
+// ✅ Allow CORS properly
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("CORS policy error: Origin not allowed"));
-      }
-    },
+    origin: "https://explore-ai-travel.vercel.app", // Frontend URL
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+// ✅ Manually set headers in every response (just in case)
+app.use((req, res, next) => {
+  res.header(
+    "Access-Control-Allow-Origin",
+    "https://explore-ai-travel.vercel.app"
+  );
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
+
+// ✅ Handle OPTIONS requests (preflight)
+app.options("*", (req, res) => {
+  res.sendStatus(200);
+});
 
 // ✅ Load API Key
 const API_KEY = process.env.VITE_GEMINI_API_KEY;
