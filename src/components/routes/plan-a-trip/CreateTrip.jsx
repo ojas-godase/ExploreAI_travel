@@ -19,22 +19,21 @@ function CreateTrip({ createTripPageRef }) {
     noOfDays: "",
     Budget: "",
     People: "",
+    Date: "",
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [itinerary, setItinerary] = useState(null); // Store the generated itinerary
+  const [itinerary, setItinerary] = useState(null);
   const navigate = useNavigate();
 
-  // Function to handle input changes
   const handleInputChange = (name, value) => {
     setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
 
   const generateTrip = async () => {
-    if (!formData.noOfDays || !formData.location || !formData.People || !formData.Budget) {
+    if (!formData.noOfDays || !formData.location || !formData.People || !formData.Budget || !formData.Date) {
       return toast.error("Please fill out every field or select every option.");
     }
 
-    // Remove days validation check
     if (!formData.noOfDays || isNaN(formData.noOfDays) || formData.noOfDays <= 0) {
       return toast.error("Please enter a valid number of days (greater than 0).");
     }
@@ -42,7 +41,8 @@ function CreateTrip({ createTripPageRef }) {
     const FINAL_PROMPT = PROMPT.replace(/{location}/g, formData.location)
       .replace(/{noOfDays}/g, formData.noOfDays)
       .replace(/{People}/g, formData.People)
-      .replace(/{Budget}/g, formData.Budget);
+      .replace(/{Budget}/g, formData.Budget)
+      .replace(/{Date}/g, formData.Date); // Add Date to the prompt
 
     console.log("🔹 FINAL_PROMPT:", FINAL_PROMPT);
 
@@ -59,7 +59,6 @@ function CreateTrip({ createTripPageRef }) {
 
       let trip;
       try {
-        // Try extracting JSON if AI wraps it in ```json ... ```
         const jsonMatch = responseText.match(/```json\n([\s\S]+?)\n```/);
         if (jsonMatch) {
           trip = JSON.parse(jsonMatch[1]);
@@ -75,7 +74,6 @@ function CreateTrip({ createTripPageRef }) {
         return toast.error("AI response is not valid JSON. Please try again.");
       }
 
-      // Set itinerary to state
       setItinerary(trip.itinerary);
 
       setIsLoading(false);
@@ -125,11 +123,24 @@ function CreateTrip({ createTripPageRef }) {
           />
         </div>
 
+        {/* Trip Start Date Input */}
+        <div className="date">
+          <h2 className="font-semibold text-lg md:text-xl mb-3">When does your trip start? 📅</h2>
+          <Input
+            className="h-10 w-full rounded-md border px-3 py-2 text-sm text-center"
+            placeholder="Select a date"
+            type="date"
+            name="Date"
+            required
+            onChange={(event) => handleInputChange("Date", event.target.value)}
+          />
+        </div>
+
         {/* Trip Duration Input */}
         <div className="day">
           <h2 className="font-semibold text-lg md:text-xl mb-3">How long is your Trip? 🕜</h2>
           <Input
-            className="text-center"
+            className="text-center h-10 w-full rounded-md border px-3 py-2 text-sm"
             placeholder="Ex: 2"
             type="number"
             name="noOfDays"
@@ -156,10 +167,21 @@ function CreateTrip({ createTripPageRef }) {
               </div>
             ))}
           </div>
-        </div>
 
-        {/* Number of People Selection */}
-        <div className="people">
+          {/* Custom Budget in USD */}
+          <div className="custom-budget mt-5">
+            <h3 className="font-semibold text-lg md:text-xl mb-3">Or mention your Budget in USD 💵</h3>
+            <Input
+              className="h-10 w-full rounded-md border px-3 py-2 text-sm text-center"
+              placeholder="Enter your budget in USD"
+              type="number"
+              name="customBudget"
+              min="1"
+              onChange={(event) => handleInputChange("Budget", event.target.value)}
+            />
+          </div>
+          {/* Number of People Selection */}
+      <div className="people">
           <h2 className="font-semibold text-lg md:text-xl mb-3">Who are you traveling with? 🚗</h2>
           <div className="options grid grid-cols-1 gap-5 md:grid-cols-3">
             {SelectNoOfPersons.map((item) => (
@@ -169,7 +191,7 @@ function CreateTrip({ createTripPageRef }) {
                 className={`option cursor-pointer transition-all hover:scale-110 p-4 h-32 flex items-center justify-center flex-col border rounded-lg
                   ${formData.People === item.no && "border border-foreground/80"}`}
               >
-                <h3 className="font-bold text-[15px] md:text-[18px]">
+                <h3 className="font-bold text-[15px] md:font-[18px]">
                   {item.icon} {item.title}
                 </h3>
                 <p className="text-sm">{item.desc}</p>
@@ -177,32 +199,24 @@ function CreateTrip({ createTripPageRef }) {
             ))}
           </div>
         </div>
+        </div>
       </div>
 
-      {/* Generate Trip Button */}
+      
+
       <div className="create-trip-btn w-full flex items-center justify-center h-32">
         <Button disabled={isLoading} onClick={generateTrip}>
           {isLoading ? <AiOutlineLoading3Quarters className="h-6 w-6 animate-spin" /> : "Let's Go 🌏"}
         </Button>
       </div>
-
-      {/* Display Itinerary */}
-      {itinerary && (
-        <div className="mt-10">
-          {itinerary.map((day, index) => (
-            <div key={index} className="day-container mt-6">
-              <h3 className="font-semibold text-2xl">Day {index + 1}: {day.title}</h3>
-              <ul className="list-disc pl-5 mt-3">
-                {day.activities.map((activity, i) => (
-                  <li key={i} className="text-lg">{activity}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   );
 }
 
 export default CreateTrip;
+
+
+
+
+        
+      

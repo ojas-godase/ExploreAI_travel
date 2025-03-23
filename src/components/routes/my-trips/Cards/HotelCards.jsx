@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getPlaceDetails, PHOTO_URL } from "@/Service/GlobalApi";
+import { getPlaceDetails, getPhotoUrl } from "@/Service/GlobalApi";
 
 function HotelCards({ hotel, city }) {
   const [placeDetails, setPlaceDetails] = useState(null);
@@ -12,13 +12,13 @@ function HotelCards({ hotel, city }) {
   useEffect(() => {
     const fetchPlaceInfo = async () => {
       try {
-        const { data } = await getPlaceDetails({ textQuery: `${hotel.name} ${city}` });
-        if (data.places.length > 0) {
-          const place = data.places[0];
+        const places = await getPlaceDetails(`${hotel.name} ${city}`);
+        if (places.length > 0) {
+          const place = places[0];
           setPlaceDetails(place);
-          setPhotoUrl(PHOTO_URL.replace("{replace}", place.photos?.[0]?.name || ""));
-          setAddress(place.formattedAddress);
-          setLocation(place.googleMapsUri);
+          setPhotoUrl(getPhotoUrl(place.photos?.[0]?.name || ""));
+          setAddress(place.formattedAddress || "");
+          setLocation(place.googleMapsUri || "");
         }
       } catch (error) {
         console.error("Error fetching place details:", error);
