@@ -20,7 +20,7 @@ function Header({ headerRef }) {
         </div>
       </Link>
       <div className="flex items-center justify-center gap-5">
-        {/* <ThemeToggle /> */}
+        <ThemeToggle />
         <Link to="/plan-a-trip">
           <Button>Plan a Trip</Button>
         </Link>
