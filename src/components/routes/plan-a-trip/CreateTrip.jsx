@@ -140,13 +140,16 @@ function CreateTrip({ createTripPageRef }) {
         <div className="day">
           <h2 className="font-semibold text-lg md:text-xl mb-3">How long is your Trip? 🕜</h2>
           <Input
-            className="text-center h-10 w-full rounded-md border px-3 py-2 text-sm"
-            placeholder="Ex: 2"
-            type="number"
-            name="noOfDays"
-            required
-            onChange={(day) => handleInputChange("noOfDays", day.target.value)}
-          />
+              className="text-center h-10 w-full rounded-md border px-3 py-2 text-sm"
+              placeholder="Ex: 2"
+              type="number"
+              name="noOfDays"
+              required
+              min="1"
+              onWheel={(e) => e.target.blur()} // Prevents scroll-based change
+              onKeyDown={(e) => ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()} // Blocks invalid inputs
+              onChange={(day) => handleInputChange("noOfDays", day.target.value)}
+            />
         </div>
 
         {/* Budget Selection */}
@@ -177,6 +180,7 @@ function CreateTrip({ createTripPageRef }) {
               type="number"
               name="customBudget"
               min="1"
+              onWheel={(e) => e.target.blur()} // Prevent scroll change
               onChange={(event) => handleInputChange("Budget", event.target.value)}
             />
           </div>
