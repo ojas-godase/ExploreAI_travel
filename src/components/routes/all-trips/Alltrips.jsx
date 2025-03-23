@@ -1,6 +1,6 @@
 import { LogInContext } from "@/Context/LogInContext/Login";
-import { db } from "@/Service/Firebase";
-import { collection, getDocs, query, where } from "firebase/firestore";
+// import { db } from "@/Service/Firebase";
+// import { collection, getDocs, query, where } from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
 import AlltripsCard from "./AlltripsCard";
 import { Link } from "react-router-dom";
