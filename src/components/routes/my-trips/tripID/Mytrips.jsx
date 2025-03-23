@@ -146,7 +146,7 @@ function MyTrips() {
       <div className="fixed top-16 left-4 bg-white p-4 rounded-lg shadow-lg w-72 flex flex-col items-center justify-center space-y-2 z-10">
         {weatherData ? (
           <>
-            <img src={weatherIconUrl} alt="Weather Icon" className="w-16 h-16" />
+            <img src={weatherIconUrl} alt="Weather Icon" className="w-14 h-16" />
             <h3 className="text-xl font-semibold">{tripData.location}</h3>
             <p className="text-lg">{weatherData.description}</p>
             <p className="text-lg font-semibold">{weatherData.temperature}°C</p>
