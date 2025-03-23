@@ -143,7 +143,7 @@ function MyTrips() {
   return (
     <div className="container mx-auto p-4 flex gap-4">
       {/* Weather Section */}
-      <div className="fixed top-16 left-4 bg-white p-4 rounded-lg shadow-lg w-72 flex flex-col items-center justify-center space-y-2 z-10">
+      <div className="fixed top-16 left-2 bg-white p-4 rounded-lg shadow-lg w-72 flex flex-col items-center justify-center space-y-2 z-10">
         {weatherData ? (
           <>
             <img src={weatherIconUrl} alt="Weather Icon" className="w-14 h-16" />
